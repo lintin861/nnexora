@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nexora - Withdraw</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+</head>
+
+<body>
+
+    <!-- Background -->
+    <div class="background">
+
+        <div class="grid"></div>
+
+        <span class="dot dot1"></span>
+        <span class="dot dot2"></span>
+        <span class="dot dot3"></span>
+        <span class="dot dot4"></span>
+        <span class="dot dot5"></span>
+        <span class="dot dot6"></span>
+        <span class="dot dot7"></span>
+        <span class="dot dot8"></span>
+
+        <div class="network-line line1"></div>
+        <div class="network-line line2"></div>
+        <div class="network-line line3"></div>
+
+    </div>
+
+
+    <main class="page-container withdraw-page">
+
+        <!-- Header -->
+        <header class="withdraw-header">
+
+            <button
+                class="back-button"
+                onclick="goBack()"
+            >
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <div>
+                <h1>Withdraw Funds</h1>
+
+                <p>
+                    Secure transfer to your bank account
+                </p>
+            </div>
+
+        </header>
+
+
+        <!-- Available Balance -->
+        <section class="withdraw-balance">
+
+            <span>Available Balance</span>
+
+            <strong id="balance">
+                ₦70,000.00
+            </strong>
+
+            <small>
+                <i class="fa-solid fa-circle"></i>
+                Updated in real-time • Secured
+            </small>
+
+        </section>
+
+
+        <!-- Amount -->
+        <section class="withdraw-form">
+
+            <label for="amount">
+                AMOUNT
+            </label>
+
+            <div class="input-box">
+
+                <i class="fa-solid fa-naira-sign"></i>
+
+                <input
+                    type="number"
+                    id="amount"
+                    placeholder="0.00"
+                    min="0"
+                >
+
+            </div>
+
+
+            <!-- Quick amounts -->
+            <div class="quick-amounts">
+
+                <button onclick="setAmount(1000)">
+                    ₦1,000
+                </button>
+
+                <button onclick="setAmount(5000)">
+                    ₦5,000
+                </button>
+
+                <button onclick="setAmount(10000)">
+                    ₦10,000
+                </button>
+
+                <button onclick="setAmount(25000)">
+                    ₦25,000
+                </button>
+
+                <button onclick="setAmount(50000)">
+                    ₦50,000
+                </button>
+
+            </div>
+
+
+            <!-- Bank -->
+            <label for="bank">
+                SELECT BANK
+            </label>
+
+            <div class="input-box select-box">
+
+                <i class="fa-solid fa-building-columns"></i>
+
+                <select id="bank">
+
+                    <option value="">
+                        Choose your bank
+                    </option>
+
+                    <option value="access">
+                        Access Bank
+                    </option>
+
+                    <option value="gtb">
+                        GTBank
+                    </option>
+
+                    <option value="firstbank">
+                        First Bank
+                    </option>
+
+                    <option value="uba">
+                        UBA
+                    </option>
+
+                    <option value="zenith">
+                        Zenith Bank
+                    </option>
+
+                    <option value="opay">
+                        Opay
+                    </option>
+
+                    <option value="kuda">
+                        Kuda
+                    </option>
+
+                    <option value="palmpay">
+                        PalmPay
+                    </option>
+
+                </select>
+
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+
+            </div>
+
+
+            <!-- Account Number -->
+            <label for="accountNumber">
+                ACCOUNT NUMBER
+            </label>
+
+            <div class="input-box">
+
+                <i class="fa-regular fa-credit-card"></i>
+
+                <input
+                    type="text"
+                    id="accountNumber"
+                    maxlength="10"
+                    inputmode="numeric"
+                    placeholder="Enter 10-digit account number"
+                >
+
+            </div>
+
+
+            <!-- Secret Key -->
+            <label for="secretKey">
+                NEXORA SECRET KEY
+            </label>
+
+            <div class="input-box">
+
+                <i class="fa-solid fa-key"></i>
+
+                <input
+                    type="text"
+                    id="secretKey"
+                    placeholder="NXR-XXXX-XXXX"
+                >
+
+            </div>
+
+
+            <p class="key-warning">
+                You need a valid Nexora Key. Purchase one first.
+            </p>
+
+
+            <!-- Withdraw button -->
+            <button
+                class="withdraw-button"
+                onclick="withdrawFunds()"
+            >
+
+                <i class="fa-regular fa-credit-card"></i>
+
+                Withdraw Now
+
+            </button>
+
+        </section>
+
+
+        <!-- Security -->
+        <div class="security-message withdraw-security">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <span>
+                Secure withdrawal system • End-to-end encrypted
+            </span>
+
+        </div>
+
+    </main>
+
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+
+        <button
+            class="nav-item"
+            onclick="goTo('index.html')"
+        >
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('activity.html')"
+        >
+            <i class="fa-solid fa-wave-square"></i>
+            <span>Activity</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('earn.html')"
+        >
+            <i class="fa-solid fa-bolt"></i>
+            <span>Earn</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('card.html')"
+        >
+            <i class="fa-regular fa-credit-card"></i>
+            <span>Card</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('profile.html')"
+        >
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </button>
+
+    </nav>
+
+
+    <!-- Toast -->
+    <div id="withdrawToast" class="toast">
+
+        <i class="fa-solid fa-circle-info"></i>
+
+        <span id="withdrawToastText">
+            Message
+        </span>
+
+    </div>
+
+
+    <script src="withdraw.js"></script>
+
+</body>
+</html>

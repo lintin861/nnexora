@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora - Refer &amp; Earn</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="background">
+        <div class="grid"></div>
+        <span class="dot dot1"></span><span class="dot dot2"></span>
+        <span class="dot dot3"></span><span class="dot dot4"></span>
+        <span class="dot dot5"></span><span class="dot dot6"></span>
+        <span class="dot dot7"></span><span class="dot dot8"></span>
+        <div class="network-line line1"></div>
+        <div class="network-line line2"></div>
+        <div class="network-line line3"></div>
+    </div>
+
+    <main class="page-container referral-page">
+        <header class="settings-header">
+            <button class="settings-back" type="button" onclick="window.location.href='profile.html'" aria-label="Back to profile">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div>
+                <h1>Refer &amp; Earn</h1>
+                <p>Invite friends and earn rewards</p>
+            </div>
+        </header>
+
+        <section class="referral-stats">
+            <article class="referral-stat">
+                <i class="fa-solid fa-user-group"></i>
+                <strong id="referralCount">0</strong>
+                <span>Total Referrals</span>
+            </article>
+            <article class="referral-stat">
+                <i class="fa-solid fa-gift"></i>
+                <strong id="referralEarned">₦0</strong>
+                <span>Total Earned</span>
+            </article>
+        </section>
+
+        <section class="settings-card referral-card">
+            <div class="settings-card-heading">
+                <span class="settings-icon"><i class="fa-solid fa-share-nodes"></i></span>
+                <div><h2>Your Referral</h2><p>Share your code with friends</p></div>
+            </div>
+            <div class="referral-field">
+                <label for="referralCodeValue">REFERRAL CODE</label>
+                <div class="referral-copy-row">
+                    <output id="referralCodeValue">Loading...</output>
+                    <button class="copy-referral" type="button" data-copy="referralCodeValue" aria-label="Copy referral code"><i class="fa-regular fa-copy"></i></button>
+                </div>
+            </div>
+            <div class="referral-field">
+                <label for="referralLinkValue">REFERRAL LINK</label>
+                <div class="referral-copy-row">
+                    <output id="referralLinkValue">Loading...</output>
+                    <button class="copy-referral" type="button" data-copy="referralLinkValue" aria-label="Copy referral link"><i class="fa-regular fa-copy"></i></button>
+                </div>
+            </div>
+            <button class="settings-submit referral-share" id="shareReferral" type="button">
+                <i class="fa-solid fa-share-nodes"></i> Share &amp; Earn ₦4,500
+            </button>
+            <p class="referral-caption">Earn ₦4,500 for each successful signup using your referral link.</p>
+        </section>
+
+        <section class="settings-card leaderboard-card">
+            <div class="settings-card-heading">
+                <span class="settings-icon"><i class="fa-solid fa-trophy"></i></span>
+                <div><h2>Referral Leaderboard</h2><p>Top inviters</p></div>
+            </div>
+            <ol id="referralLeaderboard" class="referral-leaderboard">
+                <li class="leaderboard-empty">Loading referrals...</li>
+            </ol>
+        </section>
+    </main>
+
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></button>
+        <button class="nav-item" onclick="window.location.href='activity.html'"><i class="fa-solid fa-wave-square"></i><span>Activity</span></button>
+        <button class="nav-item" onclick="window.location.href='earn.html'"><i class="fa-solid fa-bolt"></i><span>Earn</span></button>
+        <button class="nav-item" onclick="window.location.href='card.html'"><i class="fa-regular fa-credit-card"></i><span>Card</span></button>
+        <button class="nav-item active" onclick="window.location.href='profile.html'"><i class="fa-regular fa-user"></i><span>Profile</span></button>
+    </nav>
+    <div id="referralToast" class="toast" role="status"><i class="fa-solid fa-circle-check"></i><span id="referralToastText"></span></div>
+    <script src="referral.js"></script>
+</body>
+</html>

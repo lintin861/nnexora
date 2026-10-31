@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Nexora - Tap & Earn</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- Background -->
+    <div class="background">
+
+        <div class="grid"></div>
+
+        <span class="dot dot1"></span>
+        <span class="dot dot2"></span>
+        <span class="dot dot3"></span>
+        <span class="dot dot4"></span>
+        <span class="dot dot5"></span>
+        <span class="dot dot6"></span>
+        <span class="dot dot7"></span>
+        <span class="dot dot8"></span>
+
+        <div class="network-line line1"></div>
+        <div class="network-line line2"></div>
+        <div class="network-line line3"></div>
+
+    </div>
+
+
+    <main class="page-container earn-page">
+
+        <!-- Header -->
+        <header class="earn-header">
+
+            <button
+                class="back-button"
+                onclick="goHome()"
+            >
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <div>
+
+                <h1>Tap & Earn</h1>
+
+                <p>
+                    Earn ₦6,440 every 20 seconds
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <!-- Total earnings -->
+        <section class="total-earnings">
+
+            <span>Total Earnings</span>
+
+            <strong id="totalEarnings">
+                ₦0
+            </strong>
+
+            <small>
+                Instantly synced to your dashboard balance
+            </small>
+
+        </section>
+
+
+        <!-- Stats -->
+        <section class="earn-stats">
+
+            <div class="earn-stat">
+
+                <i class="fa-regular fa-clock"></i>
+
+                <span>Sessions</span>
+
+                <strong id="sessions">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="earn-stat">
+
+                <i class="fa-solid fa-arrow-trend-up"></i>
+
+                <span>Per Session</span>
+
+                <strong>
+                    ₦6,440
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- Start earning -->
+        <section class="start-area">
+
+            <button
+                class="start-earning"
+                id="startButton"
+                type="button"
+            >
+
+                <i class="fa-solid fa-bolt"></i>
+
+                <span id="startText">
+                    TAP TO EARN ₦6,440
+                </span>
+
+            </button>
+
+
+            <!-- Countdown -->
+            <div
+                id="tapTimer"
+                style="
+                    margin-top: 15px;
+                    text-align: center;
+                    font-weight: 600;
+                "
+            >
+                Checking...
+            </div>
+
+
+            <!-- Message -->
+            <div
+                id="tapMessage"
+                style="
+                    margin-top: 10px;
+                    text-align: center;
+                "
+            ></div>
+
+        </section>
+
+
+        <!-- How it works -->
+        <section class="how-card">
+
+            <div class="how-title">
+
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                <strong>How It Works</strong>
+
+            </div>
+
+
+            <p>
+                Tap "TAP TO EARN" once to receive
+                ₦6,440. After tapping, you must wait
+                20 seconds before you can earn again.
+            </p>
+
+        </section>
+
+
+        <!-- Security -->
+        <div class="security-message">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <span>
+                Secure earning system • Encrypted
+            </span>
+
+        </div>
+
+
+    </main>
+
+
+    <!-- Bottom navigation -->
+    <nav class="bottom-nav">
+
+        <button
+            class="nav-item"
+            onclick="goTo('index.html')"
+        >
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('activity.html')"
+        >
+            <i class="fa-solid fa-wave-square"></i>
+            <span>Activity</span>
+        </button>
+
+
+        <button
+            class="nav-item active"
+        >
+            <i class="fa-solid fa-bolt"></i>
+            <span>Earn</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('card.html')"
+        >
+            <i class="fa-regular fa-credit-card"></i>
+            <span>Card</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('profile.html')"
+        >
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </button>
+
+    </nav>
+
+
+
+    <script src="earn.js"></script>
+
+    <script>
+
+    const tapButton =
+        document.getElementById("startButton");
+
+    const tapTimer =
+        document.getElementById("tapTimer");
+
+    const tapMessage =
+        document.getElementById("tapMessage");
+
+    const startText =
+        document.getElementById("startText");
+
+    const totalEarnings =
+        document.getElementById("totalEarnings");
+
+    const sessions =
+        document.getElementById("sessions");
+
+
+    let countdownInterval = null;
+
+
+    // =========================================
+    // FORMAT MONEY
+    // =========================================
+
+    function formatMoney(amount) {
+
+        return "₦" +
+            Number(amount).toLocaleString(
+                "en-NG",
+                {
+                    minimumFractionDigits: 0
+                }
+            );
+
+    }
+
+
+    // =========================================
+    // FORMAT TIME
+    // =========================================
+
+    function formatTime(milliseconds) {
+
+        const totalSeconds =
+            Math.ceil(milliseconds / 1000);
+
+        const minutes =
+            Math.floor(totalSeconds / 60);
+
+        const seconds =
+            totalSeconds % 60;
+
+        return (
+            String(minutes).padStart(2, "0") +
+            ":" +
+            String(seconds).padStart(2, "0")
+        );
+
+    }
+
+
+    // =========================================
+    // COUNTDOWN
+    // =========================================
+
+    function startCountdown(milliseconds) {
+
+        clearInterval(countdownInterval);
+
+        let remaining = milliseconds;
+
+        tapButton.disabled = true;
+
+        tapButton.classList.add("disabled");
+
+        startText.textContent =
+            "WAIT FOR NEXT TAP";
+
+
+        function update() {
+
+            if (remaining <= 0) {
+
+                clearInterval(
+                    countdownInterval
+                );
+
+                tapButton.disabled = false;
+
+                tapButton.classList.remove(
+                    "disabled"
+                );
+
+                startText.textContent =
+                    "TAP TO EARN ₦6,440";
+
+                tapTimer.textContent =
+                    "You can tap again!";
+
+                return;
+
+            }
+
+
+            tapTimer.textContent =
+                "Next tap in " +
+                formatTime(remaining);
+
+
+            remaining -= 1000;
+
+        }
+
+
+        update();
+
+
+        countdownInterval =
+            setInterval(
+                update,
+                1000
+            );
+
+    }
+
+
+    // =========================================
+    // CHECK SERVER STATUS
+    // =========================================
+
+    async function checkTapStatus() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/earn/status",
+                    {
+                        credentials: "include"
+                    }
+                );
+
+
+            if (response.status === 401) {
+
+                window.location.href =
+                    "index.html";
+
+                return;
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                tapTimer.textContent =
+                    data.message ||
+                    "Unable to check earning status.";
+
+                return;
+
+            }
+
+
+            if (data.canTap) {
+
+                tapButton.disabled = false;
+
+                tapButton.classList.remove(
+                    "disabled"
+                );
+
+                startText.textContent =
+                    "TAP TO EARN ₦6,440";
+
+                tapTimer.textContent =
+                    "You can tap now!";
+
+            } else {
+
+                startCountdown(
+                    data.remaining
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Tap status error:",
+                error
+            );
+
+            tapTimer.textContent =
+                "Unable to connect to server.";
+
+        }
+
+    }
+
+
+    // =========================================
+    // TAP BUTTON
+    // =========================================
+
+    tapButton.addEventListener(
+        "click",
+        async function () {
+
+            if (tapButton.disabled) {
+                return;
+            }
+
+
+            tapButton.disabled = true;
+
+            startText.textContent =
+                "ADDING ₦6,440...";
+
+            tapMessage.textContent =
+                "";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/earn/tap",
+                        {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                // =============================
+                // ERROR
+                // =============================
+
+                if (!response.ok) {
+
+                    tapMessage.textContent =
+                        data.message ||
+                        "Please wait.";
+
+                    if (data.remaining) {
+
+                        startCountdown(
+                            data.remaining
+                        );
+
+                    } else {
+
+                        tapButton.disabled =
+                            false;
+
+                        startText.textContent =
+                            "TAP TO EARN ₦6,440";
+
+                    }
+
+                    return;
+                }
+
+
+                // Update sessions
+                const currentSessions =
+                    Number(
+                        sessions.textContent
+                    ) || 0;
+
+                sessions.textContent =
+                    currentSessions + 1;
+
+
+                // Add this earning to total
+                const currentTotal =
+                    Number(
+                        totalEarnings.textContent
+                            .replace(/[₦,]/g, "")
+                    ) || 0;
+
+                totalEarnings.textContent =
+                    formatMoney(
+                        currentTotal +
+                        Number(data.reward)
+                    );
+
+
+                // Start 20-minute countdown
+                startCountdown(
+                    data.remaining
+                );
+
+
+                console.log(
+                    "New balance:",
+                    data.balance
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Tap error:",
+                    error
+                );
+
+
+                tapMessage.textContent =
+                    "Something went wrong. Please try again.";
+
+
+                tapButton.disabled =
+                    false;
+
+
+                startText.textContent =
+                    "TAP TO EARN ₦6,440";
+
+            }
+
+        }
+    );
+
+
+    // =========================================
+    // LOAD WHEN PAGE OPENS
+    // =========================================
+
+    checkTapStatus();
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora - Security Settings</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="background">
+        <div class="grid"></div>
+        <span class="dot dot1"></span><span class="dot dot2"></span>
+        <span class="dot dot3"></span><span class="dot dot4"></span>
+        <span class="dot dot5"></span><span class="dot dot6"></span>
+        <span class="dot dot7"></span><span class="dot dot8"></span>
+        <div class="network-line line1"></div>
+        <div class="network-line line2"></div>
+        <div class="network-line line3"></div>
+    </div>
+
+    <main class="page-container settings-page">
+        <header class="settings-header">
+            <button class="settings-back" type="button" onclick="window.location.href='profile.html'" aria-label="Back to profile">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div>
+                <h1>Security Settings</h1>
+                <p>Manage your account security</p>
+            </div>
+        </header>
+
+        <section class="settings-card">
+            <div class="settings-card-heading">
+                <span class="settings-icon"><i class="fa-solid fa-lock"></i></span>
+                <div><h2>Change Password</h2><p>Update your current password</p></div>
+            </div>
+            <form id="passwordForm" class="settings-form">
+                <label for="currentPassword">Current password</label>
+                <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" required>
+                <label for="newPassword">New password</label>
+                <input id="newPassword" name="newPassword" type="password" minlength="6" autocomplete="new-password" required>
+                <label for="confirmPassword">Confirm new password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" minlength="6" autocomplete="new-password" required>
+                <button class="settings-submit" type="submit"><i class="fa-solid fa-lock"></i> Update Password</button>
+                <p class="settings-message" id="passwordMessage" role="status" hidden></p>
+            </form>
+        </section>
+
+        <section class="settings-card">
+            <div class="settings-card-heading">
+                <span class="settings-icon"><i class="fa-solid fa-key"></i></span>
+                <div><h2>Reset Password</h2><p>Reset link sent to your email</p></div>
+            </div>
+            <div class="settings-form">
+                <label for="resetEmail">Account email</label>
+                <input id="resetEmail" type="email" readonly>
+                <button class="settings-submit" id="resetPasswordButton" type="button">
+                    <i class="fa-solid fa-key"></i> Send Reset Link
+                </button>
+                <p class="settings-message" id="resetMessage" role="status" hidden></p>
+                <p class="settings-note">Email delivery is not configured yet. While signed in, use Change Password above.</p>
+            </div>
+        </section>
+
+        <section class="settings-card">
+            <div class="settings-card-heading">
+                <span class="settings-icon"><i class="fa-regular fa-envelope"></i></span>
+                <div><h2>Change Email</h2><p>Update your account email address</p></div>
+            </div>
+            <form id="emailForm" class="settings-form">
+                <label for="newEmail">New email address</label>
+                <input id="newEmail" name="email" type="email" autocomplete="email" required>
+                <label for="emailCurrentPassword">Current password</label>
+                <input id="emailCurrentPassword" name="currentPassword" type="password" autocomplete="current-password" required>
+                <button class="settings-submit" type="submit"><i class="fa-regular fa-envelope"></i> Update Email</button>
+                <p class="settings-message" id="emailMessage" role="status" hidden></p>
+            </form>
+        </section>
+
+        <p class="settings-secure"><i class="fa-solid fa-shield-halved"></i> Keep your password private and unique.</p>
+    </main>
+
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></button>
+        <button class="nav-item" onclick="window.location.href='activity.html'"><i class="fa-solid fa-wave-square"></i><span>Activity</span></button>
+        <button class="nav-item" onclick="window.location.href='earn.html'"><i class="fa-solid fa-bolt"></i><span>Earn</span></button>
+        <button class="nav-item" onclick="window.location.href='card.html'"><i class="fa-regular fa-credit-card"></i><span>Card</span></button>
+        <button class="nav-item active" onclick="window.location.href='profile.html'"><i class="fa-regular fa-user"></i><span>Profile</span></button>
+    </nav>
+    <script src="security.js"></script>
+</body>
+</html>

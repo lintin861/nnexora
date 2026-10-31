@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora - Support Center</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="background">
+        <div class="grid"></div>
+        <span class="dot dot1"></span><span class="dot dot2"></span>
+        <span class="dot dot3"></span><span class="dot dot4"></span>
+        <span class="dot dot5"></span><span class="dot dot6"></span>
+        <span class="dot dot7"></span><span class="dot dot8"></span>
+        <div class="network-line line1"></div>
+        <div class="network-line line2"></div>
+        <div class="network-line line3"></div>
+    </div>
+
+    <main class="page-container support-page">
+        <header class="settings-header">
+            <button class="settings-back" type="button" onclick="window.location.href='profile.html'" aria-label="Back to profile">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div>
+                <h1>Support Center</h1>
+                <p>We're here to help</p>
+            </div>
+        </header>
+
+        <section class="support-status" aria-label="Support information">
+            <article>
+                <i class="fa-regular fa-clock"></i>
+                <span>Response</span>
+                <strong>Contact us</strong>
+            </article>
+            <article>
+                <i class="fa-solid fa-headset"></i>
+                <span>Availability</span>
+                <strong>Support team</strong>
+            </article>
+            <article>
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Your account</span>
+                <strong>Keep details private</strong>
+            </article>
+        </section>
+
+        <section class="support-contact-card">
+            <div class="support-contact-heading">
+                <span class="support-telegram-icon"><i class="fa-brands fa-telegram"></i></span>
+                <div>
+                    <h2>Chat on Telegram</h2>
+                    <p>Get in touch with the support team</p>
+                </div>
+            </div>
+            <a class="support-primary-button" id="telegramSupportLink" href="#" hidden>
+                <i class="fa-brands fa-telegram"></i> Start Conversation
+            </a>
+            <p class="support-link-placeholder" id="telegramLinkPlaceholder">
+                Telegram support link will be added soon.
+            </p>
+        </section>
+
+        <section class="support-shortcuts" aria-label="Other contact options">
+            <a class="support-shortcut support-shortcut-disabled" id="telegramChannelLink" href="#" aria-disabled="true">
+                <i class="fa-brands fa-telegram"></i>
+                <span id="telegramChannelLabel">Telegram Channel (coming soon)</span>
+            </a>
+            <a class="support-shortcut support-shortcut-disabled" aria-disabled="true">
+                <i class="fa-regular fa-envelope"></i>
+                <span>Email support (coming soon)</span>
+            </a>
+        </section>
+
+        <section class="support-faq">
+            <h2><i class="fa-regular fa-circle-question"></i> Frequently Asked Questions</h2>
+            <details class="support-faq-item">
+                <summary>How do I withdraw my earnings?<i class="fa-solid fa-chevron-down"></i></summary>
+                <p>Open Withdraw from your dashboard, enter an amount and your bank details, then submit. This project currently records a demo withdrawal and updates your balance and Activity; it does not send money to a bank.</p>
+            </details>
+            <details class="support-faq-item">
+                <summary>What is the Nexora Key?<i class="fa-solid fa-chevron-down"></i></summary>
+                <p>The key purchase is a demo flow. A submitted receipt is not proof of payment, and this demo does not automatically verify transfers or activate real withdrawal access.</p>
+            </details>
+            <details class="support-faq-item">
+                <summary>What is the Tap &amp; Earn feature?<i class="fa-solid fa-chevron-down"></i></summary>
+                <p>Use the Earn page to see the available demo reward and claim it when the cooldown allows.</p>
+            </details>
+            <details class="support-faq-item">
+                <summary>How do I upgrade my plan?<i class="fa-solid fa-chevron-down"></i></summary>
+                <p>Plan upgrades are not available in this demo yet. Contact the support team after its Telegram link has been added.</p>
+            </details>
+            <details class="support-faq-item">
+                <summary>Is my account secure?<i class="fa-solid fa-chevron-down"></i></summary>
+                <p>Use a unique password and keep it private. You can update your password from Profile &gt; Security Settings. Never share your password or one-time codes in a support chat.</p>
+            </details>
+            <details class="support-faq-item">
+                <summary>How long do withdrawals take?<i class="fa-solid fa-chevron-down"></i></summary>
+                <p>Withdrawals are currently simulated by the project and are not sent to a bank, so there is no real transfer or settlement time.</p>
+            </details>
+        </section>
+    </main>
+
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-house"></i><span>Home</span></button>
+        <button class="nav-item" onclick="window.location.href='activity.html'"><i class="fa-solid fa-wave-square"></i><span>Activity</span></button>
+        <button class="nav-item" onclick="window.location.href='earn.html'"><i class="fa-solid fa-bolt"></i><span>Earn</span></button>
+        <button class="nav-item" onclick="window.location.href='card.html'"><i class="fa-regular fa-credit-card"></i><span>Card</span></button>
+        <button class="nav-item" onclick="window.location.href='profile.html'"><i class="fa-regular fa-user"></i><span>Profile</span></button>
+    </nav>
+    <script src="support.js"></script>
+</body>
+</html>

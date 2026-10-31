@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Nexora - Login</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-page">
+
+<div class="auth-container">
+
+    <div class="logo">NEXORA</div>
+
+    <h1>Welcome Back</h1>
+    <p class="subtitle">Login to your account</p>
+
+    <form id="loginForm">
+
+        <label>Email</label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter email"
+            required
+        >
+
+        <label>Password</label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+            required
+        >
+
+        <button type="submit">
+            Login
+        </button>
+
+        <p id="message"></p>
+
+    </form>
+
+    <p class="switch">
+        Don't have an account?
+        <a href="register.html">Create Account</a>
+    </p>
+
+</div>
+
+<script>
+
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const message = document.getElementById("message");
+
+    try {
+
+        const response = await fetch("/api/login", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                email,
+                password
+            })
+
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            message.textContent = data.message;
+            return;
+        }
+
+        window.location.href = "index.html";
+
+    } catch (error) {
+
+        message.textContent = "Unable to connect to server.";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

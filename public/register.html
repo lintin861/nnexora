@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora - Create Account</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-page">
+
+<div class="auth-container">
+
+    <div class="logo">NEXORA</div>
+
+    <h1>Create Account</h1>
+    <p class="subtitle">Create your account to continue</p>
+
+    <form id="registerForm">
+
+        <label>Username</label>
+        <input
+            type="text"
+            id="username"
+            placeholder="Enter username"
+            required
+            minlength="3"
+        >
+
+        <label>Email</label>
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter email"
+            required
+        >
+
+        <label for="referralCode">Referral Code (optional)</label>
+        <input
+            type="text"
+            id="referralCode"
+            placeholder="Enter referral code"
+            autocomplete="off"
+        >
+
+        <label>Password</label>
+        <input
+            type="password"
+            id="password"
+            placeholder="Create password"
+            required
+            minlength="6"
+        >
+
+        <label>Confirm Password</label>
+        <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm password"
+            required
+        >
+
+        <button type="submit">
+            Create Account
+        </button>
+
+        <p id="message"></p>
+
+    </form>
+
+    <p class="switch">
+        Already have an account?
+        <a href="login.html">Login</a>
+    </p>
+
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const referralCode = document.getElementById("referralCode").value.trim();
+    const message = document.getElementById("message");
+
+    if (password !== confirmPassword) {
+        message.textContent = "Passwords do not match.";
+        return;
+    }
+
+    try {
+
+        const response = await fetch("/api/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                email,
+                password,
+                referralCode
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            message.textContent = data.message;
+            return;
+        }
+
+        message.textContent = "Account created successfully.";
+        if (data.welcomeBonusGranted) {
+            sessionStorage.setItem("showWelcomeBonus", "1");
+        }
+
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 700);
+
+    } catch (error) {
+        message.textContent = "Unable to connect to server.";
+    }
+});
+
+const referralCodeFromLink = new URLSearchParams(window.location.search).get("ref");
+if (referralCodeFromLink) {
+    document.getElementById("referralCode").value = referralCodeFromLink.trim().toUpperCase();
+}
+</script>
+
+</body>
+</html>

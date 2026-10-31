@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nexora - Virtual Card</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+</head>
+
+<body>
+
+    <!-- Background -->
+    <div class="background">
+
+        <div class="grid"></div>
+
+        <span class="dot dot1"></span>
+        <span class="dot dot2"></span>
+        <span class="dot dot3"></span>
+        <span class="dot dot4"></span>
+        <span class="dot dot5"></span>
+        <span class="dot dot6"></span>
+        <span class="dot dot7"></span>
+        <span class="dot dot8"></span>
+
+        <div class="network-line line1"></div>
+        <div class="network-line line2"></div>
+        <div class="network-line line3"></div>
+
+    </div>
+
+
+    <main class="page-container card-page">
+
+        <!-- Page heading -->
+        <header class="simple-page-header">
+
+            <div>
+                <h1>Virtual Card</h1>
+
+                <p>
+                    Manage your Nexora card
+                </p>
+            </div>
+
+        </header>
+
+
+        <!-- Virtual card -->
+        <section class="virtual-card">
+
+            <div class="card-brand-icon">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+
+            <span class="card-brand">
+                NEXORA
+            </span>
+
+
+            <div class="card-number">
+                •••• &nbsp; •••• &nbsp; •••• &nbsp; ••••
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+                    <span>CARD HOLDER</span>
+                    <strong>KIKJ6HTHT</strong>
+                </div>
+
+                <div class="expiry">
+                    <span>EXPIRES</span>
+                    <strong>••/••</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Card not activated -->
+        <section class="card-warning">
+
+            <div class="warning-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+
+            <div>
+
+                <strong>
+                    Card Not Activated
+                </strong>
+
+                <p>
+                    You need to purchase your Nexora Key
+                    to activate your virtual card. Once
+                    activated, you'll have full access to
+                    card features.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- Card information -->
+        <section class="card-information">
+
+            <h3>Card Information</h3>
+
+
+            <div class="information-row">
+
+                <span>Card Type</span>
+
+                <strong>
+                    Virtual Debit
+                </strong>
+
+            </div>
+
+
+            <div class="information-row">
+
+                <span>Network</span>
+
+                <strong>
+                    Nexora Pay
+                </strong>
+
+            </div>
+
+
+            <div class="information-row">
+
+                <span>Currency</span>
+
+                <strong>
+                    NGN (₦)
+                </strong>
+
+            </div>
+
+
+            <div class="information-row">
+
+                <span>Status</span>
+
+                <strong class="inactive">
+                    Inactive
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- Security information -->
+        <section class="card-security">
+
+            <div class="security-small-icon">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+
+            <p>
+                Your Nexora virtual card allows secure online
+                transactions. Card details are protected and
+                encrypted at all times.
+            </p>
+
+        </section>
+
+
+        <div class="security-message">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <span>
+                Bank-grade encryption • Secure card
+            </span>
+
+        </div>
+
+    </main>
+
+
+    <!-- Bottom navigation -->
+    <nav class="bottom-nav">
+
+        <button
+            class="nav-item"
+            onclick="goTo('index.html')"
+        >
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('activity.html')"
+        >
+            <i class="fa-solid fa-wave-square"></i>
+            <span>Activity</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('earn.html')"
+        >
+            <i class="fa-solid fa-bolt"></i>
+            <span>Earn</span>
+        </button>
+
+
+        <button
+            class="nav-item active"
+        >
+            <i class="fa-regular fa-credit-card"></i>
+            <span>Card</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('profile.html')"
+        >
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </button>
+
+    </nav>
+
+
+    <script src="card.js"></script>
+
+</body>
+</html>

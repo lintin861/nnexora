@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Nexora - Profile</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- Background -->
+    <div class="background">
+
+        <div class="grid"></div>
+
+        <span class="dot dot1"></span>
+        <span class="dot dot2"></span>
+        <span class="dot dot3"></span>
+        <span class="dot dot4"></span>
+        <span class="dot dot5"></span>
+        <span class="dot dot6"></span>
+        <span class="dot dot7"></span>
+        <span class="dot dot8"></span>
+
+        <div class="network-line line1"></div>
+        <div class="network-line line2"></div>
+        <div class="network-line line3"></div>
+
+    </div>
+
+
+    <main class="page-container profile-page">
+
+
+        <!-- Heading -->
+        <header class="simple-page-header">
+
+            <h1>Profile</h1>
+
+        </header>
+
+
+        <!-- User card -->
+        <section class="profile-card">
+
+            <div class="profile-avatar">
+                <span id="profileAvatarInitial">?</span>
+
+                <button
+                    class="camera-button"
+                    onclick="changePhoto()"
+                >
+                    <i class="fa-solid fa-camera"></i>
+                </button>
+
+            </div>
+
+
+            <div class="profile-details">
+
+                <strong id="profileUsername">Loading...</strong>
+
+                <span id="profileEmail">Loading...</span>
+
+                <small>
+                    Basic Plan
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <!-- Stats -->
+        <section class="profile-stats">
+
+
+            <div class="profile-stat">
+
+                <span>Balance</span>
+
+                <strong id="profileBalance">₦0.00</strong>
+
+            </div>
+
+
+            <div class="profile-stat">
+
+                <span>Status</span>
+
+                <strong class="verified">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    Verified
+
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- Settings -->
+        <section class="profile-options">
+
+
+            <button
+                class="profile-option"
+                onclick="goTo('security.html')"
+            >
+
+                <div class="option-icon">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                </div>
+
+                <div class="option-text">
+
+                    <strong>
+                        Security Settings
+                    </strong>
+
+                    <span>
+                        Manage your account security
+                    </span>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right option-arrow"></i>
+
+            </button>
+
+
+            <button
+                class="profile-option"
+                onclick="openOption('Notifications')"
+            >
+
+                <div class="option-icon">
+
+                    <i class="fa-regular fa-bell"></i>
+
+                </div>
+
+                <div class="option-text">
+
+                    <strong>
+                        Notifications
+                    </strong>
+
+                    <span>
+                        Manage alerts and updates
+                    </span>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right option-arrow"></i>
+
+            </button>
+
+
+            <button
+                class="profile-option"
+                onclick="openOption('Nexora Key')"
+            >
+
+                <div class="option-icon">
+
+                    <i class="fa-solid fa-key"></i>
+
+                </div>
+
+                <div class="option-text">
+
+                    <strong>
+                        Nexora Key
+                    </strong>
+
+                    <span>
+                        Not activated yet
+                    </span>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right option-arrow"></i>
+
+            </button>
+
+
+            <button
+                class="profile-option"
+                onclick="goTo('referral.html')"
+            >
+
+                <div class="option-icon">
+
+                    <i class="fa-solid fa-share-nodes"></i>
+
+                </div>
+
+                <div class="option-text">
+
+                    <strong>
+                        Refer & Earn
+                    </strong>
+
+                    <span>
+                        Invite friends and earn rewards
+                    </span>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right option-arrow"></i>
+
+            </button>
+
+
+            <button
+                class="profile-option"
+                onclick="goTo('support.html')"
+            >
+
+                <div class="option-icon">
+
+                    <i class="fa-regular fa-circle-question"></i>
+
+                </div>
+
+                <div class="option-text">
+
+                    <strong>
+                        Help & Support
+                    </strong>
+
+                    <span>
+                        Get help with your account
+                    </span>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right option-arrow"></i>
+
+            </button>
+
+
+            <button
+                class="profile-option logout"
+                onclick="logout()"
+            >
+
+                <div class="option-icon">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                </div>
+
+                <div class="option-text">
+
+                    <strong>
+                        Logout
+                    </strong>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right option-arrow"></i>
+
+            </button>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- Bottom navigation -->
+    <nav class="bottom-nav">
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('index.html')"
+        >
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('activity.html')"
+        >
+            <i class="fa-solid fa-wave-square"></i>
+            <span>Activity</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('earn.html')"
+        >
+            <i class="fa-solid fa-bolt"></i>
+            <span>Earn</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="goTo('card.html')"
+        >
+            <i class="fa-regular fa-credit-card"></i>
+            <span>Card</span>
+        </button>
+
+
+        <button
+            class="nav-item active"
+        >
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </button>
+
+
+    </nav>
+
+
+    <!-- Toast -->
+    <div
+        id="profileToast"
+        class="toast"
+    >
+        <i class="fa-solid fa-circle-check"></i>
+
+        <span id="profileToastText">
+            Done
+        </span>
+    </div>
+
+
+    <script src="profile.js"></script>
+
+</body>
+
+</html>
