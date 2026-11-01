@@ -183,7 +183,7 @@
     "username": "lintin567",
     "email": "chukwudidarlington7@gmail.com",
     "password": "$2b$10$jZ6dSVj8E98x1NzVdvJclepPrRK7/byjJ5CU8f.DVYv9wsSicssT6",
-    "balance": 50000,
+    "balance": 60000,
     "createdAt": "2026-10-30T16:33:10.071Z",
     "bonuses": {
       "welcome": {
@@ -192,11 +192,20 @@
         "claimedAt": "2026-10-30T16:33:10.071Z"
       },
       "surprise": {
-        "lastClaimedAt": "2026-10-31T13:06:50.665Z",
-        "nextAvailableAt": "2026-10-31T13:09:50.665Z"
+        "lastClaimedAt": "2026-10-31T14:20:34.443Z",
+        "nextAvailableAt": "2026-10-31T14:23:34.443Z"
       }
     },
     "transactions": [
+      {
+        "id": "0e337450-8039-4722-9c3f-619881a45d61",
+        "type": "credit",
+        "title": "Surprise Bonus",
+        "amount": 10000,
+        "date": "2026-10-31T14:20:34.443Z",
+        "status": "successful",
+        "message": "Surprise bonus claimed successfully."
+      },
       {
         "id": "ecbbc451-a9f2-4ecd-9714-c305e5298dba",
         "type": "credit",
@@ -298,5 +307,46 @@
       }
     ],
     "referralCode": "NXR-8403FC"
+  },
+  {
+    "id": "bf1681a4-cb5a-4755-982f-8aa61ae14e75",
+    "username": "lington",
+    "email": "kunfupandaui09@gmail.com",
+    "password": "$2b$10$p.oxApqeAT3Wc0fZC5kXVOPyrYchPLTIudMym01LufgaNKYVicLsu",
+    "referralCode": "NXR-42D831",
+    "referredBy": null,
+    "balance": 60000,
+    "createdAt": "2026-11-01T01:35:53.087Z",
+    "bonuses": {
+      "welcome": {
+        "amount": 50000,
+        "claimed": true,
+        "claimedAt": "2026-11-01T01:35:53.087Z"
+      },
+      "surprise": {
+        "lastClaimedAt": "2026-11-01T01:36:01.987Z",
+        "nextAvailableAt": "2026-11-01T01:39:01.987Z"
+      }
+    },
+    "transactions": [
+      {
+        "id": "b255eaa9-3775-484b-b42a-5600e4067451",
+        "type": "credit",
+        "title": "Surprise Bonus",
+        "amount": 10000,
+        "date": "2026-11-01T01:36:01.987Z",
+        "status": "successful",
+        "message": "Surprise bonus claimed successfully."
+      },
+      {
+        "id": "ef9fb997-03d7-44bd-89b8-6c7a7a81c571",
+        "type": "credit",
+        "title": "Welcome Bonus",
+        "amount": 50000,
+        "date": "2026-11-01T01:35:53.087Z",
+        "status": "successful",
+        "message": "Welcome bonus added when your account was created."
+      }
+    ]
   }
 ]

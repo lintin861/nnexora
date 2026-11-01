@@ -4,6 +4,9 @@ const amountInput =
 const bankInput =
     document.getElementById("bank");
 
+const accountNameInput =
+    document.getElementById("accountName");
+
 const accountInput =
     document.getElementById("accountNumber");
 
@@ -34,6 +37,9 @@ async function withdrawFunds() {
     const bank =
         bankInput.value;
 
+    const accountName =
+        accountNameInput.value.trim();
+
     const accountNumber =
         accountInput.value.trim();
 
@@ -55,6 +61,15 @@ async function withdrawFunds() {
 
         showToast(
             "Please select your bank."
+        );
+
+        return;
+    }
+
+    if (accountName.length < 2) {
+
+        showToast(
+            "Enter the account holder's name."
         );
 
         return;
@@ -94,6 +109,7 @@ async function withdrawFunds() {
             body: JSON.stringify({
                 amount,
                 bank,
+                accountName,
                 accountNumber
             })
         });

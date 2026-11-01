@@ -1190,14 +1190,28 @@ app.post("/api/withdraw", requireAuth, (req, res) => {
         "zenith",
         "opay",
         "kuda",
-        "palmpay"
+        "palmpay",
+        "fidelity",
+        "fcmb",
+        "union",
+        "stanbic",
+        "sterling",
+        "wema",
+        "ecobank"
     ];
     const bank = String(req.body.bank || "");
+    const accountName = String(req.body.accountName || "").trim();
     const accountNumber = String(req.body.accountNumber || "");
 
     if (!Number.isFinite(amount) || amount <= 0) {
         return res.status(400).json({
             message: "Enter a valid withdrawal amount."
+        });
+    }
+
+    if (accountName.length < 2 || accountName.length > 100) {
+        return res.status(400).json({
+            message: "Enter a valid account holder name."
         });
     }
 
