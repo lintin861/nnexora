@@ -5,6 +5,18 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const multer = require("multer");
+const {
+    pool,
+    getUsers,
+    saveUsers,
+    getPurchase,
+    savePurchase,
+    initializeDatabase
+} = require("./database");
+
+if (process.env.VERCEL && !process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET must be configured for Vercel deployments.");
+}
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5500;
@@ -19,46 +31,10 @@ const REFERRAL_REWARD = 4500;
 // =========================
 
 const DATA_DIR = process.env.NEXORA_DATA_DIR || path.join(__dirname, "data");
-const USERS_FILE = path.join(DATA_DIR, "users.json");
 const RECEIPTS_DIR = path.join(DATA_DIR, "receipts");
-const KEY_PURCHASES = new Map();
 
-// =========================
-// CREATE DATA FOLDER/FILE
-// =========================
-
-if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-
-if (!fs.existsSync(USERS_FILE)) {
-    fs.writeFileSync(USERS_FILE, "[]");
-}
-
-if (!fs.existsSync(RECEIPTS_DIR)) {
+if (!process.env.VERCEL) {
     fs.mkdirSync(RECEIPTS_DIR, { recursive: true });
-}
-
-// =========================
-// DATA HELPERS
-// =========================
-
-function getUsers() {
-    try {
-        return JSON.parse(
-            fs.readFileSync(USERS_FILE, "utf8")
-        );
-    } catch (error) {
-        console.error("Could not read users.json:", error);
-        return [];
-    }
-}
-
-function saveUsers(users) {
-    fs.writeFileSync(
-        USERS_FILE,
-        JSON.stringify(users, null, 2)
-    );
 }
 
 function createReferralCode(users) {
@@ -76,28 +52,45 @@ function createReferralCode(users) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.set("trust proxy", 1);
+
+app.use(async (req, res, next) => {
+    try {
+        await initializeDatabase();
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+
+const sessionConfig = {
+    secret: process.env.SESSION_SECRET || "nexora-local-development-secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: process.env.VERCEL ? "auto" : false,
+        sameSite: "lax",
+        maxAge: 1000 * 60 * 60 * 24
+    }
+};
+
+if (pool) {
+    const PgSession = require("connect-pg-simple")(session);
+    sessionConfig.store = new PgSession({
+        pool,
+        createTableIfMissing: true
+    });
+}
+
 app.use(
-    session({
-        secret: "nexora-school-project-secret",
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            httpOnly: true,
-            maxAge: 1000 * 60 * 60 * 24
-        }
-    })
+    session(sessionConfig)
 );
 
 const upload = multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => cb(null, RECEIPTS_DIR),
-        filename: (req, file, cb) => {
-            const extension = path.extname(file.originalname) || ".png";
-            cb(null, `${Date.now()}-${crypto.randomUUID()}${extension}`);
-        }
-    }),
+    storage: multer.memoryStorage(),
     limits: {
-        fileSize: 5 * 1024 * 1024
+        fileSize: 4 * 1024 * 1024
     },
     fileFilter: (req, file, cb) => {
         const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
@@ -161,7 +154,7 @@ app.post("/api/register", async (req, res) => {
             });
         }
 
-        const users = getUsers();
+        const users = await getUsers();
         const referralCode = String(req.body.referralCode || "").trim().toUpperCase();
         const referrer = referralCode
             ? users.find(user => user.referralCode === referralCode)
@@ -250,7 +243,7 @@ app.post("/api/register", async (req, res) => {
             });
         }
 
-        saveUsers(users);
+        await saveUsers(users);
 
         // Automatically log the new user in
         req.session.userId = newUser.id;
@@ -265,8 +258,13 @@ app.post("/api/register", async (req, res) => {
         });
 
     } catch (error) {
-
         console.error("REGISTER ERROR:", error);
+
+        if (error.code === "23505") {
+            return res.status(409).json({
+                message: "An account with this email already exists."
+            });
+        }
 
         res.status(500).json({
             message: "Server error."
@@ -295,7 +293,7 @@ app.post("/api/login", async (req, res) => {
             });
         }
 
-        const users = getUsers();
+        const users = await getUsers();
 
         const cleanEmail =
             email.trim().toLowerCase();
@@ -346,8 +344,8 @@ app.post("/api/login", async (req, res) => {
 // ACCOUNT SECURITY
 // =========================
 
-app.get("/api/security", requireAuth, (req, res) => {
-    const user = getUsers().find(user => user.id === req.session.userId);
+app.get("/api/security", requireAuth, async (req, res) => {
+    const user = (await getUsers()).find(user => user.id === req.session.userId);
 
     if (!user) {
         return res.status(404).json({
@@ -371,7 +369,7 @@ app.post("/api/security/password", requireAuth, async (req, res) => {
             });
         }
 
-        const users = getUsers();
+        const users = await getUsers();
         const user = users.find(user => user.id === req.session.userId);
         if (!user) {
             return res.status(404).json({
@@ -386,7 +384,7 @@ app.post("/api/security/password", requireAuth, async (req, res) => {
         }
 
         user.password = await bcrypt.hash(newPassword, 10);
-        saveUsers(users);
+        await saveUsers(users);
         res.json({
             success: true,
             message: "Your password was updated."
@@ -414,7 +412,7 @@ app.post("/api/security/email", requireAuth, async (req, res) => {
             });
         }
 
-        const users = getUsers();
+        const users = await getUsers();
         const user = users.find(user => user.id === req.session.userId);
         if (!user) {
             return res.status(404).json({
@@ -435,7 +433,7 @@ app.post("/api/security/email", requireAuth, async (req, res) => {
         }
 
         user.email = email;
-        saveUsers(users);
+        await saveUsers(users);
         res.json({
             success: true,
             email: user.email,
@@ -453,8 +451,8 @@ app.post("/api/security/email", requireAuth, async (req, res) => {
 // REFERRALS
 // =========================
 
-app.get("/api/referrals", requireAuth, (req, res) => {
-    const users = getUsers();
+app.get("/api/referrals", requireAuth, async (req, res) => {
+    const users = await getUsers();
     const user = users.find(user => user.id === req.session.userId);
     if (!user) {
         return res.status(404).json({
@@ -470,7 +468,7 @@ app.get("/api/referrals", requireAuth, (req, res) => {
         }
     });
     if (changed) {
-        saveUsers(users);
+        await saveUsers(users);
     }
 
     const referrals = users.filter(account => account.referredBy === user.id);
@@ -501,8 +499,8 @@ app.get("/api/referrals", requireAuth, (req, res) => {
 // SURPRISE BONUS
 // =====================================
 
-app.get("/api/surprise-bonus", requireAuth, (req, res) => {
-    const users = getUsers();
+app.get("/api/surprise-bonus", requireAuth, async (req, res) => {
+    const users = await getUsers();
     const user = users.find(u => u.id === req.session.userId);
 
     if (!user) {
@@ -526,8 +524,8 @@ app.get("/api/surprise-bonus", requireAuth, (req, res) => {
 });
 
 
-app.post("/api/surprise-bonus/claim", requireAuth, (req, res) => {
-    const users = getUsers();
+app.post("/api/surprise-bonus/claim", requireAuth, async (req, res) => {
+    const users = await getUsers();
     const user = users.find(u => u.id === req.session.userId);
 
     if (!user) {
@@ -572,7 +570,7 @@ app.post("/api/surprise-bonus/claim", requireAuth, (req, res) => {
         message: "Surprise bonus claimed successfully."
     });
 
-    saveUsers(users);
+    await saveUsers(users);
 
     res.json({
         success: true,
@@ -588,9 +586,9 @@ app.post("/api/surprise-bonus/claim", requireAuth, (req, res) => {
 // CURRENT USER
 // =========================
 
-app.get("/api/me", requireAuth, (req, res) => {
+app.get("/api/me", requireAuth, async (req, res) => {
 
-    const users = getUsers();
+    const users = await getUsers();
 
     const user = users.find(
         u => u.id === req.session.userId
@@ -630,9 +628,9 @@ app.get("/api/me", requireAuth, (req, res) => {
 const TAP_REWARD = 6440;
 const TAP_COOLDOWN = 20 * 1000; // 20 seconds
 
-app.get("/api/earn/status", requireAuth, (req, res) => {
+app.get("/api/earn/status", requireAuth, async (req, res) => {
 
-    const users = getUsers();
+    const users = await getUsers();
 
     const user = users.find(
         u => u.id === req.session.userId
@@ -667,9 +665,9 @@ app.get("/api/earn/status", requireAuth, (req, res) => {
 });
 
 
-app.post("/api/earn/tap", requireAuth, (req, res) => {
+app.post("/api/earn/tap", requireAuth, async (req, res) => {
 
-    const users = getUsers();
+    const users = await getUsers();
 
     const user = users.find(
         u => u.id === req.session.userId
@@ -749,7 +747,7 @@ app.post("/api/earn/tap", requireAuth, (req, res) => {
 
     });
 
-    saveUsers(users);
+    await saveUsers(users);
 
     res.json({
 
@@ -773,9 +771,9 @@ app.post("/api/earn/tap", requireAuth, (req, res) => {
 // DASHBOARD
 // =========================
 
-app.get("/api/index", requireAuth, (req, res) => {
+app.get("/api/index", requireAuth, async (req, res) => {
 
-    const users = getUsers();
+    const users = await getUsers();
 
     const user = users.find(
         u => u.id === req.session.userId
@@ -881,9 +879,9 @@ app.get("/api/index", requireAuth, (req, res) => {
 // GET BONUSES
 // =========================
 
-app.get("/api/bonuses", requireAuth, (req, res) => {
+app.get("/api/bonuses", requireAuth, async (req, res) => {
 
-    const users = getUsers();
+    const users = await getUsers();
 
     const user = users.find(
         u => u.id === req.session.userId
@@ -918,7 +916,7 @@ app.get("/api/bonuses", requireAuth, (req, res) => {
             status: "successful",
             message: "Welcome bonus added to your account."
         });
-        saveUsers(users);
+        await saveUsers(users);
         welcomeBonusGrantedNow = true;
     }
 
@@ -938,9 +936,9 @@ app.get("/api/bonuses", requireAuth, (req, res) => {
 app.post(
     "/api/bonus/welcome/claim",
     requireAuth,
-    (req, res) => {
+    async (req, res) => {
 
-        const users = getUsers();
+        const users = await getUsers();
 
         const user = users.find(
             u => u.id === req.session.userId
@@ -1011,7 +1009,7 @@ app.post(
 
         });
 
-        saveUsers(users);
+        await saveUsers(users);
 
         res.json({
 
@@ -1035,9 +1033,9 @@ app.post(
 // ACTIVITY
 // =========================
 
-app.get("/api/activity", requireAuth, (req, res) => {
+app.get("/api/activity", requireAuth, async (req, res) => {
 
-    const users = getUsers();
+    const users = await getUsers();
 
     const user = users.find(
         u => u.id === req.session.userId
@@ -1071,8 +1069,8 @@ app.get("/api/activity", requireAuth, (req, res) => {
 // NEXORA KEY PURCHASES
 // =========================
 
-app.post("/api/key-purchases", requireAuth, (req, res) => {
-    const users = getUsers();
+app.post("/api/key-purchases", requireAuth, async (req, res) => {
+    const users = await getUsers();
     const user = users.find(u => u.id === req.session.userId);
 
     if (!user) {
@@ -1098,7 +1096,7 @@ app.post("/api/key-purchases", requireAuth, (req, res) => {
         createdAt: new Date().toISOString()
     };
 
-    KEY_PURCHASES.set(purchaseId, purchase);
+    await savePurchase(purchase);
 
     res.json({
         purchaseId,
@@ -1108,8 +1106,8 @@ app.post("/api/key-purchases", requireAuth, (req, res) => {
     });
 });
 
-app.post("/api/key-purchases/:purchaseId/receipt", requireAuth, (req, res) => {
-    const purchase = KEY_PURCHASES.get(req.params.purchaseId);
+app.post("/api/key-purchases/:purchaseId/receipt", requireAuth, async (req, res, next) => {
+    const purchase = await getPurchase(req.params.purchaseId);
 
     if (!purchase) {
         return res.status(404).json({
@@ -1131,7 +1129,7 @@ app.post("/api/key-purchases/:purchaseId/receipt", requireAuth, (req, res) => {
 
     const uploadReceipt = upload.single("receipt");
 
-    uploadReceipt(req, res, (error) => {
+    uploadReceipt(req, res, async error => {
         if (error) {
             return res.status(400).json({
                 error: error.message || "Could not upload receipt."
@@ -1146,17 +1144,28 @@ app.post("/api/key-purchases/:purchaseId/receipt", requireAuth, (req, res) => {
 
         purchase.status = "submitted";
         purchase.receipt = {
-            filename: req.file.filename,
+            filename: `${Date.now()}-${crypto.randomUUID()}${path.extname(req.file.originalname) || ".png"}`,
             originalName: req.file.originalname,
-            path: req.file.path,
+            contentType: req.file.mimetype,
+            data: req.file.buffer.toString("base64"),
             uploadedAt: new Date().toISOString()
         };
         purchase.reference = `NX-${Date.now().toString(36).toUpperCase()}`;
 
-        res.json({
-            success: true,
-            reference: purchase.reference
-        });
+        try {
+            if (!process.env.VERCEL) {
+                const receiptPath = path.join(RECEIPTS_DIR, purchase.receipt.filename);
+                fs.writeFileSync(receiptPath, req.file.buffer);
+                purchase.receipt.path = receiptPath;
+            }
+            await savePurchase(purchase);
+            res.json({
+                success: true,
+                reference: purchase.reference
+            });
+        } catch (saveError) {
+            next(saveError);
+        }
     });
 });
 
@@ -1166,9 +1175,9 @@ app.post("/api/key-purchases/:purchaseId/receipt", requireAuth, (req, res) => {
 // DEMO ONLY
 // =========================
 
-app.post("/api/withdraw", requireAuth, (req, res) => {
+app.post("/api/withdraw", requireAuth, async (req, res) => {
 
-    const users = getUsers();
+    const users = await getUsers();
 
     const user = users.find(
         u => u.id === req.session.userId
@@ -1256,7 +1265,7 @@ app.post("/api/withdraw", requireAuth, (req, res) => {
 
     });
 
-    saveUsers(users);
+    await saveUsers(users);
 
     res.json({
 
@@ -1321,23 +1330,39 @@ app.use("/api", (req, res) => {
 
 });
 
+app.use((error, req, res, next) => {
+    console.error("REQUEST ERROR:", error);
+    if (res.headersSent) {
+        return next(error);
+    }
+    res.status(500).json({
+        message: process.env.VERCEL && !process.env.DATABASE_URL
+            ? "Database is not configured. Set DATABASE_URL in Vercel."
+            : "Server error."
+    });
+});
+
 // =========================
 // START SERVER
 // =========================
 
-app.listen(PORT, () => {
+if (require.main === module) {
+    app.listen(PORT, () => {
 
-    console.log("");
-    console.log("==============================");
-    console.log(" Nexora School Project");
-    console.log("==============================");
-    console.log(
-        `Server: http://localhost:${PORT}`
-    );
-    console.log(
-        `Login:  http://localhost:${PORT}/`
-    );
-    console.log("==============================");
-    console.log("");
+        console.log("");
+        console.log("==============================");
+        console.log(" Nexora School Project");
+        console.log("==============================");
+        console.log(
+            `Server: http://localhost:${PORT}`
+        );
+        console.log(
+            `Login:  http://localhost:${PORT}/`
+        );
+        console.log("==============================");
+        console.log("");
 
-});
+    });
+}
+
+module.exports = app;
